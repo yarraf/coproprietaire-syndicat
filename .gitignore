@@ -1,0 +1,64 @@
+# ── Build outputs ─────────────────────────────────────────────────────────
+bin/
+obj/
+out/
+publish/
+
+# ── .NET ──────────────────────────────────────────────────────────────────
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+*.DotSettings.user
+
+# ── Secrets & configuration locale ────────────────────────────────────────
+appsettings.Local.json
+appsettings.*.Local.json
+*.env
+.env
+.env.local
+.env.*.local
+secrets.json
+
+# ── Logs ──────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Uploads (fichiers utilisateurs — jamais en repo) ──────────────────────
+uploads/
+justificatifs/
+
+# ── Docker ────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Node (frontend React / React Native) ──────────────────────────────────
+node_modules/
+.next/
+dist/
+.expo/
+.expo-shared/
+
+# ── OS ────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── JetBrains Rider ───────────────────────────────────────────────────────
+.idea/
+*.sln.iml
+
+# ── NuGet ─────────────────────────────────────────────────────────────────
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ── Tests coverage ────────────────────────────────────────────────────────
+TestResults/
+coverage/
+*.coverage
+*.coveragexml

@@ -1,0 +1,109 @@
+<svg width="100%" viewBox="0 0 680 900" xmlns="http://www.w3.org/2000/svg" style="font-family: system-ui, -apple-system, sans-serif; background: #fff;">
+
+<!-- System boundary -->
+<rect x="115" y="12" width="450" height="868" rx="16" fill="none" stroke="#73726c" stroke-width="1" stroke-dasharray="6 3"/>
+<text x="340" y="34" text-anchor="middle" font-size="14" font-weight="500" fill="#2C2C2A">Application Syndic</text>
+
+<!-- Legend -->
+<ellipse cx="200" cy="54" rx="10" ry="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="215" y="58" font-size="12" fill="#5F5E5A">Agent syndic</text>
+<ellipse cx="370" cy="54" rx="10" ry="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="385" y="58" font-size="12" fill="#5F5E5A">Résident</text>
+
+<!-- Actor: Agent syndic -->
+<circle cx="50" cy="400" r="11" fill="none" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="50" y1="411" x2="50" y2="440" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="32" y1="422" x2="68" y2="422" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="50" y1="440" x2="36" y2="462" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="50" y1="440" x2="64" y2="462" stroke="#2C2C2A" stroke-width="1.5"/>
+<text x="50" y="478" text-anchor="middle" font-size="12" fill="#5F5E5A">Agent syndic</text>
+<text x="50" y="492" text-anchor="middle" font-size="12" fill="#5F5E5A">(BO web)</text>
+
+<!-- Actor: Résident -->
+<circle cx="630" cy="400" r="11" fill="none" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="630" y1="411" x2="630" y2="440" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="612" y1="422" x2="648" y2="422" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="630" y1="440" x2="616" y2="462" stroke="#2C2C2A" stroke-width="1.5"/>
+<line x1="630" y1="440" x2="644" y2="462" stroke="#2C2C2A" stroke-width="1.5"/>
+<text x="630" y="478" text-anchor="middle" font-size="12" fill="#5F5E5A">Résident</text>
+<text x="630" y="492" text-anchor="middle" font-size="12" fill="#5F5E5A">(app mobile)</text>
+
+<!-- MODULE 1: Copropriété -->
+<rect x="125" y="72" width="430" height="128" rx="8" fill="none" stroke="#0F6E56" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.5"/>
+<text x="340" y="88" text-anchor="middle" font-size="12" fill="#0F6E56">Copropriété</text>
+<ellipse cx="340" cy="110" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="114" text-anchor="middle" font-size="12" fill="#2C2C2A">Gérer structure et annuaire</text>
+<line x1="68" y1="422" x2="200" y2="110" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="144" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="148" text-anchor="middle" font-size="12" fill="#2C2C2A">Inviter résident</text>
+<line x1="68" y1="422" x2="200" y2="144" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="178" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="182" text-anchor="middle" font-size="12" fill="#2C2C2A">Consulter espace personnel</text>
+<line x1="612" y1="422" x2="480" y2="178" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+
+<!-- MODULE 2: Paiement -->
+<rect x="125" y="208" width="430" height="162" rx="8" fill="none" stroke="#854F0B" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.5"/>
+<text x="340" y="224" text-anchor="middle" font-size="12" fill="#854F0B">Paiement</text>
+<ellipse cx="340" cy="246" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="250" text-anchor="middle" font-size="12" fill="#2C2C2A">Uploader justificatif</text>
+<line x1="612" y1="422" x2="480" y2="246" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="280" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="284" text-anchor="middle" font-size="12" fill="#2C2C2A">Valider / rejeter paiement</text>
+<line x1="68" y1="422" x2="200" y2="280" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="314" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="318" text-anchor="middle" font-size="12" fill="#2C2C2A">Ajuster solde d'un lot</text>
+<line x1="68" y1="422" x2="200" y2="314" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="348" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="352" text-anchor="middle" font-size="12" fill="#2C2C2A">Consulter historique paiements</text>
+<line x1="612" y1="422" x2="480" y2="348" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+
+<!-- MODULE 3: Assemblées générales -->
+<rect x="125" y="378" width="430" height="128" rx="8" fill="none" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.5"/>
+<text x="340" y="394" text-anchor="middle" font-size="12" fill="#534AB7">Assemblées générales</text>
+<ellipse cx="340" cy="416" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="420" text-anchor="middle" font-size="12" fill="#2C2C2A">Créer AG et convocations</text>
+<line x1="68" y1="422" x2="200" y2="416" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="450" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="454" text-anchor="middle" font-size="12" fill="#2C2C2A">Uploader PV</text>
+<line x1="68" y1="422" x2="200" y2="450" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="484" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="488" text-anchor="middle" font-size="12" fill="#2C2C2A">Consulter AG et PV</text>
+<line x1="612" y1="422" x2="480" y2="484" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+
+<!-- MODULE 4: Communication -->
+<rect x="125" y="514" width="430" height="94" rx="8" fill="none" stroke="#5F5E5A" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.5"/>
+<text x="340" y="530" text-anchor="middle" font-size="12" fill="#5F5E5A">Communication</text>
+<ellipse cx="340" cy="552" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="556" text-anchor="middle" font-size="12" fill="#2C2C2A">Envoyer notification push</text>
+<line x1="68" y1="422" x2="200" y2="552" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="586" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="590" text-anchor="middle" font-size="12" fill="#2C2C2A">Gérer préférences notification</text>
+<line x1="612" y1="422" x2="480" y2="586" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+
+<!-- MODULE 5: Maintenance et signalements -->
+<rect x="125" y="618" width="430" height="162" rx="8" fill="none" stroke="#D85A30" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.5"/>
+<text x="340" y="634" text-anchor="middle" font-size="12" fill="#D85A30">Maintenance et signalements</text>
+<ellipse cx="340" cy="656" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="660" text-anchor="middle" font-size="12" fill="#2C2C2A">Signaler incident / réclamation</text>
+<line x1="612" y1="422" x2="480" y2="656" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="690" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="694" text-anchor="middle" font-size="12" fill="#2C2C2A">Traiter signalement</text>
+<line x1="68" y1="422" x2="200" y2="690" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="724" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="728" text-anchor="middle" font-size="12" fill="#2C2C2A">Planifier maintenance préventive</text>
+<line x1="68" y1="422" x2="200" y2="724" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="758" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="762" text-anchor="middle" font-size="12" fill="#2C2C2A">Suivre signalement</text>
+<line x1="612" y1="422" x2="480" y2="758" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+
+<!-- MODULE 6: GED -->
+<rect x="125" y="788" width="430" height="94" rx="8" fill="none" stroke="#3B6D11" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.5"/>
+<text x="340" y="804" text-anchor="middle" font-size="12" fill="#3B6D11">Gestion documentaire (GED)</text>
+<ellipse cx="340" cy="826" rx="140" ry="16" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="340" y="830" text-anchor="middle" font-size="12" fill="#2C2C2A">Uploader document</text>
+<line x1="68" y1="422" x2="200" y2="826" stroke="#185FA5" stroke-width="0.3" opacity="0.3"/>
+<ellipse cx="340" cy="860" rx="140" ry="16" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+<text x="340" y="864" text-anchor="middle" font-size="12" fill="#2C2C2A">Consulter document</text>
+<line x1="612" y1="422" x2="480" y2="860" stroke="#993C1D" stroke-width="0.3" opacity="0.3"/>
+
+</svg>

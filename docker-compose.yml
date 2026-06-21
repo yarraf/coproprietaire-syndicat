@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: syndic-postgres
+    environment:
+      POSTGRES_DB: syndic
+      POSTGRES_USER: syndic
+      POSTGRES_PASSWORD: syndic_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U syndic -d syndic"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Syndic.Api/Dockerfile
+    container_name: syndic-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=syndic;Username=syndic;Password=syndic_password
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:?JWT_SECRET_KEY est requis}
+      - JwtSettings__Issuer=SyndicApi
+      - JwtSettings__Audience=SyndicClients
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads:/app/uploads
+      - logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  uploads:
+  logs:

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <RootNamespace>Syndic.Api</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Syndic.Modules.Identity\Syndic.Modules.Identity.csproj" />
+    <ProjectReference Include="..\Syndic.Modules.Copropriete\Syndic.Modules.Copropriete.csproj" />
+    <ProjectReference Include="..\Syndic.Modules.Paiement\Syndic.Modules.Paiement.csproj" />
+    <ProjectReference Include="..\Syndic.Modules.Assemblees\Syndic.Modules.Assemblees.csproj" />
+    <ProjectReference Include="..\Syndic.Modules.Maintenance\Syndic.Modules.Maintenance.csproj" />
+    <ProjectReference Include="..\Syndic.Modules.Ged\Syndic.Modules.Ged.csproj" />
+    <ProjectReference Include="..\Syndic.Modules.Notification\Syndic.Modules.Notification.csproj" />
+    <ProjectReference Include="..\Syndic.Shared\Syndic.Shared.csproj" />
+  </ItemGroup>
+</Project>
