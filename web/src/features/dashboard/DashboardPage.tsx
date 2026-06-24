@@ -18,12 +18,16 @@ export function DashboardPage() {
 
   const [residencesQ, paiementsQ, signalementsQ, assQ] = useQueries({
     queries: [
-      { queryKey: ['residences'], queryFn: getResidences },
-      { queryKey: ['paiements', 'en_attente'], queryFn: () => getPaiements({ statut: 'en_attente' }) },
-      { queryKey: ['signalements', 'ouverts'], queryFn: () => getSignalements({ statut: 'recu' }) },
-      { queryKey: ['assemblees'], queryFn: () => getAssemblees() },
+      { queryKey: ['residences'], queryFn: getResidences, retry: false },
+      { queryKey: ['paiements', 'en_attente'], queryFn: () => getPaiements({ statut: 'en_attente' }).catch(() => []), retry: false },
+      { queryKey: ['signalements', 'ouverts'], queryFn: () => getSignalements({ statut: 'recu' }).catch(() => []), retry: false },
+      { queryKey: ['assemblees'], queryFn: () => getAssemblees().catch(() => []), retry: false },
     ],
   })
+
+  const paiements = paiementsQ.data ?? []
+  const signalements = signalementsQ.data ?? []
+  const isLoading = residencesQ.isLoading || paiementsQ.isLoading
 
   const prochaine = assQ.data
     ?.filter(a => a.statut === 'planifiee' && new Date(a.date) > new Date())
@@ -40,7 +44,7 @@ export function DashboardPage() {
     },
     {
       label: 'Paiements en attente',
-      value: paiementsQ.data?.length ?? 0,
+      value: paiements.length,
       icon: CreditCard,
       color: 'text-amber-600',
       bg: 'bg-amber-50',
@@ -48,7 +52,7 @@ export function DashboardPage() {
     },
     {
       label: 'Signalements ouverts',
-      value: signalementsQ.data?.length ?? 0,
+      value: signalements.length,
       icon: AlertTriangle,
       color: 'text-red-500',
       bg: 'bg-red-50',
@@ -63,8 +67,6 @@ export function DashboardPage() {
       href: '/assemblees',
     },
   ]
-
-  const isLoading = residencesQ.isLoading || paiementsQ.isLoading
 
   return (
     <div>
@@ -108,11 +110,11 @@ export function DashboardPage() {
           <CardContent className="px-5 pb-4">
             {paiementsQ.isLoading ? (
               <div className="space-y-3">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12" />)}</div>
-            ) : paiementsQ.data?.length === 0 ? (
+            ) : paiements.length === 0 ? (
               <p className="text-sm text-neutral-400 py-4 text-center">Aucun paiement en attente</p>
             ) : (
               <div className="space-y-2">
-                {paiementsQ.data?.slice(0, 5).map(p => (
+                {paiements.slice(0, 5).map(p => (
                   <Link key={p.id} to={`/paiements/${p.id}`}
                     className="flex items-center justify-between rounded-lg border p-3 hover:bg-neutral-50 transition-colors">
                     <div>
@@ -138,11 +140,11 @@ export function DashboardPage() {
           <CardContent className="px-5 pb-4">
             {signalementsQ.isLoading ? (
               <div className="space-y-3">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-12" />)}</div>
-            ) : signalementsQ.data?.length === 0 ? (
+            ) : signalements.length === 0 ? (
               <p className="text-sm text-neutral-400 py-4 text-center">Aucun signalement en cours</p>
             ) : (
               <div className="space-y-2">
-                {signalementsQ.data?.slice(0, 5).map(s => (
+                {signalements.slice(0, 5).map(s => (
                   <Link key={s.id} to={`/signalements/${s.id}`}
                     className="flex items-center justify-between rounded-lg border p-3 hover:bg-neutral-50 transition-colors">
                     <div>

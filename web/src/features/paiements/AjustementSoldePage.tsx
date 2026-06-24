@@ -101,7 +101,7 @@ export function AjustementSoldePage() {
                       <select {...field} disabled={!residenceId} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50"
                         onChange={e => { field.onChange(e); form.setValue('lotId', '') }}>
                         <option value="">Sélectionner...</option>
-                        {immeubles?.map(i => <option key={i.id} value={i.id}>{i.name}</option>)}
+                        {immeubles?.map(i => <option key={i.id} value={i.id}>{i.blockName}</option>)}
                       </select>
                     </FormControl><FormMessage /></FormItem>
                 )} />
@@ -112,7 +112,7 @@ export function AjustementSoldePage() {
                       <select {...field} disabled={!immeubleId} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50"
                         onChange={e => { field.onChange(e); setSelectedLotId(e.target.value) }}>
                         <option value="">Sélectionner...</option>
-                        {lots?.map(l => <option key={l.id} value={l.id}>Lot {l.number} — {l.type} — Solde: {formatMontant(l.solde)}</option>)}
+                        {lots?.map(l => <option key={l.id} value={l.id}>Lot {l.number} — {l.lotType} — Solde: {formatMontant(l.balance)}</option>)}
                       </select>
                     </FormControl><FormMessage /></FormItem>
                 )} />

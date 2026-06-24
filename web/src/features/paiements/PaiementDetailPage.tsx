@@ -117,8 +117,8 @@ export function PaiementDetailPage() {
               {lot && (
                 <div className="flex justify-between">
                   <span className="text-sm text-neutral-500">Solde du lot</span>
-                  <span className={`text-sm font-semibold ${lot.solde >= 0 ? 'text-success' : 'text-danger'}`}>
-                    {formatMontant(lot.solde)}
+                  <span className={`text-sm font-semibold ${lot.balance >= 0 ? 'text-success' : 'text-danger'}`}>
+                    {formatMontant(lot.balance)}
                   </span>
                 </div>
               )}
