@@ -17,7 +17,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { ConfirmModal } from '@/components/shared/ConfirmModal'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { PageHeader } from '@/components/shared/PageHeader'
-import { getAssemblees, createAssemblee, convoquerAssemblee, uploadPv } from '@/api/assemblees'
+import { getAssemblees, createAssemblee, convoquerAssemblee, uploadPv, type Assemblee } from '@/api/assemblees'
 import { getResidences } from '@/api/residences'
 import { formatDateTime } from '@/lib/utils'
 
@@ -63,7 +63,7 @@ export function AssembleesPage() {
   const aVenir = assemblees?.filter(a => a.statut === 'planifiee') ?? []
   const passees = assemblees?.filter(a => a.statut !== 'planifiee') ?? []
 
-  function AgCard({ a }: { a: (typeof assemblees)[0] }) {
+  function AgCard({ a }: { a: Assemblee }) {
     if (!a) return null
     return (
       <Card key={a.id} className="hover:shadow-sm transition-shadow">

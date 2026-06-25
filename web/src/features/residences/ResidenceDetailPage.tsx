@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
@@ -69,7 +69,7 @@ function LotSection({ immeubleId }: { immeubleId: string }) {
     enabled: assignLot !== null,
   })
 
-  const lotForm = useForm<LotValues>({ resolver: zodResolver(lotSchema), defaultValues: { number: '', lotType: 'appartement', floor: 0 } })
+  const lotForm = useForm<LotValues>({ resolver: zodResolver(lotSchema) as Resolver<LotValues>, defaultValues: { number: '', lotType: 'appartement', floor: 0 } })
   const assignForm = useForm<AssignValues>({ resolver: zodResolver(assignSchema), defaultValues: { residentId: '', residentType: 'proprietaire', startDate: new Date().toISOString().split('T')[0] } })
   const terminateForm = useForm<TerminateValues>({ resolver: zodResolver(terminateSchema), defaultValues: { endDate: new Date().toISOString().split('T')[0] } })
 
@@ -318,7 +318,7 @@ export function ResidenceDetailPage() {
   })
 
   const ghForm = useForm<GhValues>({ resolver: zodResolver(ghSchema), defaultValues: { name: '' } })
-  const immForm = useForm<ImmValues>({ resolver: zodResolver(immSchema), defaultValues: { blockName: '', nbFloors: 1 } })
+  const immForm = useForm<ImmValues>({ resolver: zodResolver(immSchema) as Resolver<ImmValues>, defaultValues: { blockName: '', nbFloors: 1 } })
 
   // GH mutations
   const { mutate: createGHMut, isPending: pendingCreateGH } = useMutation({

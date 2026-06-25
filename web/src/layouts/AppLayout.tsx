@@ -46,17 +46,20 @@ export function AppLayout() {
   return (
     <div className="flex min-h-screen bg-neutral-50">
       {/* Sidebar */}
-      <aside className="w-60 shrink-0 border-r bg-white flex flex-col">
+      <aside className="w-60 shrink-0 flex flex-col bg-primary-900">
         {/* Logo */}
-        <div className="flex h-16 items-center gap-2.5 px-5 border-b">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-500">
-            <Building className="h-4 w-4 text-white" />
+        <div className="flex h-16 items-center gap-3 px-5 border-b border-primary-800">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-500 shrink-0">
+            <Building className="h-5 w-5 text-white" />
           </div>
-          <span className="font-semibold text-neutral-900 text-sm">Syndic Manager</span>
+          <div className="min-w-0">
+            <p className="font-semibold text-white text-sm leading-tight">Syndic Manager</p>
+            <p className="text-[11px] text-primary-300 leading-tight">Back Office</p>
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 px-3 space-y-0.5">
+        <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
           {NAV_LINKS.map(({ to, label, icon: Icon, badge }) => (
             <NavLink
               key={to}
@@ -65,15 +68,15 @@ export function AppLayout() {
                 cn(
                   'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                   isActive
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                    ? 'bg-primary-500/25 text-white'
+                    : 'text-primary-200 hover:bg-primary-800 hover:text-white'
                 )
               }
             >
               <Icon className="h-4 w-4 shrink-0" />
               <span className="flex-1">{label}</span>
               {badge && pendingCount > 0 && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-danger text-[10px] font-bold text-white">
                   {pendingCount > 9 ? '9+' : pendingCount}
                 </span>
               )}
@@ -82,16 +85,16 @@ export function AppLayout() {
         </nav>
 
         {/* User */}
-        <div className="border-t p-3">
+        <div className="border-t border-primary-800 p-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-neutral-50 transition-colors">
-                <Avatar className="h-7 w-7">
-                  <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+              <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-primary-800 transition-colors">
+                <Avatar className="h-7 w-7 shrink-0">
+                  <AvatarFallback className="text-xs bg-primary-600 text-white">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 text-left min-w-0">
-                  <p className="text-xs font-medium text-neutral-900 truncate">{user?.email}</p>
-                  <p className="text-xs text-neutral-400">Agent</p>
+                  <p className="text-xs font-medium text-white truncate">{user?.email}</p>
+                  <p className="text-xs text-primary-300">Agent</p>
                 </div>
               </button>
             </DropdownMenuTrigger>

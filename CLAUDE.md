@@ -37,7 +37,7 @@ coproprietaire-syndicat/
 │   │   ├── Program.cs                                # DI, middleware, Swagger, MapEndpoints
 │   │   ├── appsettings.json                          # ConnectionString port 5433, JwtSettings, Cors
 │   │   ├── appsettings.Development.json
-│   │   ├── Properties/launchSettings.json            # HTTPS :52518 / HTTP :52519
+│   │   ├── Properties/launchSettings.json            # HTTPS :8443 / HTTP :8080
 │   │   ├── Infrastructure/
 │   │   │   ├── Persistence/SyndicDbContext.cs        # IdentityDbContext<ApplicationUser>
 │   │   │   └── GlobalExceptionHandler.cs             # IExceptionHandler → ProblemDetails
@@ -130,7 +130,7 @@ coproprietaire-syndicat/
 │       └── Persistence/Configurations/
 │
 ├── web/                                              # Back Office (React)
-│   ├── vite.config.ts                               # proxy /api → http://localhost:52519
+│   ├── vite.config.ts                               # proxy /api → http://localhost:8080
 │   ├── src/
 │   │   ├── main.tsx
 │   │   ├── App.tsx
@@ -238,12 +238,12 @@ Les **implémentations** de service sont dans `Syndic.Api/Modules/<Module>/Servi
 
 ## Infrastructure & ports
 
-| Service | Port local | Détail |
-|---|---|---|
-| PostgreSQL (Docker) | **5433** | ⚠️ port 5432 occupé par PostgreSQL local Windows |
-| API HTTPS | 52518 | `launchSettings.json` |
-| API HTTP | 52519 | `launchSettings.json` — utilisé par le proxy Vite |
-| Back Office | 5173 | `npm run dev` dans `web/` |
+| Service | Port local | Port Docker | Détail |
+|---|---|---|---|
+| PostgreSQL | **5433** | 5433→5432 | ⚠️ port 5432 occupé par PostgreSQL local Windows |
+| API HTTPS | **8443** | — | `launchSettings.json` |
+| API HTTP | **8080** | 8080→8080 | `launchSettings.json` — utilisé par le proxy Vite |
+| Back Office | **5173** | 80→80 | `npm run dev` (local) / Nginx (Docker) |
 
 ### Connexion base de données
 - `Host=127.0.0.1;Port=5433;Database=syndic;Username=syndic;Password=syndic_password`
@@ -266,7 +266,7 @@ docker compose up -d postgres
 # Lancer l'API
 $env:JwtSettings__SecretKey="syndic-jwt-secret-key-dev-32chars!!"
 dotnet run --project src/Syndic.Api
-# → Swagger : https://localhost:52518/swagger
+# → Swagger : https://localhost:8443/swagger  ou  http://localhost:8080/swagger
 
 # Lancer le Back Office
 cd web
