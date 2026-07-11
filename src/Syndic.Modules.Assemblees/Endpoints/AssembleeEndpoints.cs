@@ -21,9 +21,11 @@ internal static class AssembleeEndpoints
         .RequireAuthorization(Policies.RequireAgent)
         .WithName("CreerAssemblee");
 
-        group.MapGet("/", async (Guid residenceId, IAssembleeService svc, CancellationToken ct) =>
+        group.MapGet("/", async (Guid? residenceId, IAssembleeService svc, CancellationToken ct) =>
         {
-            var list = await svc.GetByResidenceAsync(residenceId, ct);
+            var list = residenceId.HasValue
+                ? await svc.GetByResidenceAsync(residenceId.Value, ct)
+                : await svc.GetAllAsync(ct);
             return Results.Ok(list);
         })
         .RequireAuthorization()

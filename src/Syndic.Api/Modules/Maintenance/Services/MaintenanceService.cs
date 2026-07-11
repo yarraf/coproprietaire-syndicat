@@ -47,7 +47,16 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
         var s = await db.Signalements.FindAsync([id], ct)
             ?? throw new KeyNotFoundException($"Signalement {id} introuvable.");
 
-        s.MettreAJour(req.Statut, req.Reponse, req.AssigneA);
+        var statut = req.Statut switch
+        {
+            "recu"     => SignalementStatut.Recu,
+            "en_cours" => SignalementStatut.EnCours,
+            "resolu"   => SignalementStatut.Resolu,
+            "cloture"  => SignalementStatut.Cloture,
+            _          => throw new ArgumentException($"Statut invalide : {req.Statut}")
+        };
+
+        s.MettreAJour(statut, req.Reponse, req.AssigneA);
         await db.SaveChangesAsync(ct);
 
         await publisher.Publish(new SignalementMisAJour(s.Id, s.ResidentId, s.Titre, StatutToString(s.Statut)), ct);

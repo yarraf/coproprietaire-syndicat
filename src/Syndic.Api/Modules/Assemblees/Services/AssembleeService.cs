@@ -20,6 +20,15 @@ public sealed class AssembleeService(SyndicDbContext db, IPublisher publisher, I
         return ToResponse(ag);
     }
 
+    public async Task<IReadOnlyList<AssembleeResponse>> GetAllAsync(CancellationToken ct = default)
+    {
+        var list = await db.Assemblees
+            .AsNoTracking()
+            .OrderByDescending(a => a.Date)
+            .ToListAsync(ct);
+        return list.Select(ToResponse).ToList();
+    }
+
     public async Task<IReadOnlyList<AssembleeResponse>> GetByResidenceAsync(Guid residenceId, CancellationToken ct = default)
     {
         var list = await db.Assemblees

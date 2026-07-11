@@ -25,7 +25,7 @@ public record CreerSignalementRequest(
     string Description);
 
 public record MettreAJourSignalementRequest(
-    SignalementStatut Statut,
+    string Statut,
     string? Reponse,
     Guid? AssigneA);
 
