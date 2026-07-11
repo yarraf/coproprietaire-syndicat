@@ -18,8 +18,9 @@ import { ParametresPage } from '@/features/parametres/ParametresPage'
 import { useAuthStore } from '@/store/auth'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { accessToken } = useAuthStore()
+  const { accessToken, user } = useAuthStore()
   if (!accessToken) return <Navigate to="/login" replace />
+  if (user?.role !== 'Agent') return <Navigate to="/login" replace />
   return <>{children}</>
 }
 

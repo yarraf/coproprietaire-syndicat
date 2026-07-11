@@ -10,4 +10,5 @@ public interface IResidentService
     Task<ResidentResponse> UpdateResidentAsync(Guid id, UpdateResidentRequest request, CancellationToken ct = default);
     Task DeactivateResidentAsync(Guid id, CancellationToken ct = default);
     Task<InvitationResponse> InviteResidentAsync(Guid residentId, CancellationToken ct = default);
+    Task ActivateResidentAsync(Guid residentId, Guid userId, CancellationToken ct = default);
 }

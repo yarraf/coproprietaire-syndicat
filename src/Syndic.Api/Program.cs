@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +32,12 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.File("logs/syndic-.log", rollingInterval: RollingInterval.Day,
         retainedFileCountLimit: 30));
+
+// ── DataProtection (persistance des clés pour les tokens Identity) ────────
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(
+        Path.Combine(builder.Environment.ContentRootPath, "keys")))
+    .SetApplicationName("SyndicApp");
 
 // ── EF Core + PostgreSQL ───────────────────────────────────────────────────
 builder.Services.AddDbContext<SyndicDbContext>(options =>

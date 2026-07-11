@@ -29,8 +29,11 @@ export function LoginPage() {
   const { mutate, isPending } = useMutation({
     mutationFn: ({ email, password }: FormValues) => login(email, password),
     onSuccess: (res) => {
+      if (res.data.role !== 'Agent') {
+        toast.error('Accès réservé aux agents. Utilisez l\'application mobile.')
+        return
+      }
       storeLogin(res.data)
-      // La redirection est gérée par le render ci-dessous (accessToken change → re-render → Navigate)
     },
     onError: (err: unknown) => {
       const status = (err as { response?: { status?: number } })?.response?.status

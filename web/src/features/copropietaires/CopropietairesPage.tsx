@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Plus, Search, Mail, Pencil, UserX, Send, Loader2, CheckCircle2, XCircle } from 'lucide-react'
+import { Plus, Search, Mail, Pencil, UserX, Send, Loader2, CheckCircle2, XCircle, Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -280,13 +280,21 @@ export function CopropietairesPage() {
                 <span className="ml-2 font-medium text-neutral-900">{inviteResult?.expiresAt ? formatDate(inviteResult.expiresAt) : '—'}</span>
               </div>
               <div>
-                <span className="text-neutral-500 block mb-1">Token de réinitialisation :</span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-neutral-500">Code d'activation :</span>
+                  <Button variant="ghost" size="sm" className="h-6 px-2 text-xs gap-1" onClick={() => {
+                    navigator.clipboard.writeText(inviteResult!.token)
+                    toast.success('Code copié !')
+                  }}>
+                    <Copy className="h-3 w-3" /> Copier
+                  </Button>
+                </div>
                 <div className="rounded bg-neutral-100 border px-3 py-2 text-xs font-mono break-all text-neutral-700 select-all">
                   {inviteResult?.token}
                 </div>
               </div>
             </div>
-            <p className="text-xs text-neutral-400">Communiquez ce token au résident pour qu'il puisse définir son mot de passe.</p>
+            <p className="text-xs text-neutral-400">Transmettez ce code au résident (téléphone, SMS) pour qu'il active son compte dans l'application mobile.</p>
           </div>
           <DialogFooter>
             <Button onClick={() => setInviteResult(null)}>Fermer</Button>

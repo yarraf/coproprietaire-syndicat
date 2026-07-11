@@ -1,3 +1,6 @@
+# ── DataProtection keys (ne pas committer — contiennent des secrets) ───────
+**/keys/*.xml
+
 # ── Build outputs ─────────────────────────────────────────────────────────
 bin/
 obj/

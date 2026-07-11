@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Syndic.Modules.Copropriete.Application.Services;
 using Syndic.Modules.Identity.Domain.Constants;
 using Syndic.Modules.Identity.Domain.Entities;
 
@@ -16,6 +17,8 @@ public static class AuthEndpoints
     public record RegisterAgentRequest(string Email, string Password, string Nom, string Prenom);
     public record RefreshRequest(string RefreshToken);
     public record AuthResponse(string AccessToken, string RefreshToken, DateTimeOffset ExpiresAt, string Role);
+    public record MobileUser(string Id, string Email, string FirstName, string LastName, string[] Roles, string? ResidentId);
+    public record MobileAuthResponse(string AccessToken, string RefreshToken, int ExpiresIn, MobileUser User);
 
     public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
@@ -65,11 +68,56 @@ public static class AuthEndpoints
         })
         .WithName("Login");
 
+        // ── Connexion Mobile (Résidents uniquement) ──────────────────────────────
+        group.MapPost("/login-mobile", async (
+            LoginRequest req,
+            UserManager<ApplicationUser> userManager,
+            IResidentService residentService,
+            IConfiguration config,
+            CancellationToken ct) =>
+        {
+            var user = await userManager.FindByEmailAsync(req.Email);
+            if (user is null || !await userManager.CheckPasswordAsync(user, req.Password))
+                return Results.Unauthorized();
+
+            var roles = await userManager.GetRolesAsync(user);
+            if (!roles.Contains(Roles.Resident))
+                return Results.Forbid();
+
+            if (!user.ResidentId.HasValue)
+                return Results.Problem(
+                    statusCode: 403,
+                    title: "Compte non activé",
+                    detail: "Votre compte résident n'a pas encore été activé.");
+
+            var resident = await residentService.GetResidentByIdAsync(user.ResidentId.Value, ct);
+
+            var jwtSettings    = config.GetSection("JwtSettings");
+            var expiresMinutes = int.TryParse(jwtSettings["ExpiresMinutes"], out var m) ? m : 60;
+
+            var response = await BuildTokenAsync(user, roles, config, userManager);
+
+            return Results.Ok(new MobileAuthResponse(
+                response.AccessToken,
+                response.RefreshToken,
+                expiresMinutes * 60,
+                new MobileUser(
+                    user.Id.ToString(),
+                    user.Email!,
+                    resident.FirstName,
+                    resident.LastName,
+                    [.. roles],
+                    user.ResidentId?.ToString())));
+        })
+        .WithName("LoginMobile");
+
         // ── Définir le mot de passe (activation compte résident via invitation) ─
         group.MapPost("/set-password", async (
             SetPasswordRequest req,
             UserManager<ApplicationUser> userManager,
-            IConfiguration config) =>
+            IResidentService residentService,
+            IConfiguration config,
+            CancellationToken ct) =>
         {
             var user = await userManager.FindByEmailAsync(req.Email);
             if (user is null)
@@ -81,6 +129,9 @@ public static class AuthEndpoints
 
             user.EmailConfirmed = true;
             await userManager.UpdateAsync(user);
+
+            if (user.ResidentId.HasValue)
+                await residentService.ActivateResidentAsync(user.ResidentId.Value, user.Id, ct);
 
             var roles = await userManager.GetRolesAsync(user);
             var response = await BuildTokenAsync(user, roles, config, userManager);

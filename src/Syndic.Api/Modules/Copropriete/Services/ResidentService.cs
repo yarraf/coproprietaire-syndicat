@@ -80,30 +80,51 @@ public sealed class ResidentService(SyndicDbContext db, UserManager<ApplicationU
             throw new InvalidOperationException("Le compte de ce résident est déjà activé.");
 
         var existingUser = await userManager.FindByEmailAsync(resident.Email);
+
+        ApplicationUser user;
         if (existingUser is not null)
-            throw new InvalidOperationException("Un compte existe déjà pour cet email.");
-
-        var user = new ApplicationUser
         {
-            UserName       = resident.Email,
-            Email          = resident.Email,
-            EmailConfirmed = false,
-            ResidentId     = resident.Id
-        };
+            // Compte déjà activé → bloquer
+            if (existingUser.EmailConfirmed)
+                throw new InvalidOperationException("Le compte de ce résident est déjà activé.");
 
-        var createResult = await userManager.CreateAsync(user);
-        if (!createResult.Succeeded)
-        {
-            var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Échec de la création du compte : {errors}");
+            // Compte existant mais non activé → régénérer un nouveau token
+            user = existingUser;
         }
+        else
+        {
+            // Premier envoi → créer le compte Identity
+            user = new ApplicationUser
+            {
+                UserName       = resident.Email,
+                Email          = resident.Email,
+                EmailConfirmed = false,
+                ResidentId     = resident.Id
+            };
 
-        await userManager.AddToRoleAsync(user, Roles.Resident);
+            var createResult = await userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                throw new InvalidOperationException($"Échec de la création du compte : {errors}");
+            }
+
+            await userManager.AddToRoleAsync(user, Roles.Resident);
+        }
 
         var token     = await userManager.GeneratePasswordResetTokenAsync(user);
         var expiresAt = DateTimeOffset.UtcNow.AddDays(1);
 
         return new InvitationResponse(resident.Email, token, expiresAt);
+    }
+
+    public async Task ActivateResidentAsync(Guid residentId, Guid userId, CancellationToken ct = default)
+    {
+        var resident = await db.Residents.FindAsync([residentId], ct)
+            ?? throw new KeyNotFoundException("Résident introuvable.");
+
+        resident.ActivateAccount(userId);
+        await db.SaveChangesAsync(ct);
     }
 
     // ── Mapping ───────────────────────────────────────────────────────────────
