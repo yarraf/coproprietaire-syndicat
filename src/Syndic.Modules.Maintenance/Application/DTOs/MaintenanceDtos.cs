@@ -15,10 +15,19 @@ public record SignalementResponse(
     Guid? AssigneA,
     string? Reponse,
     DateTimeOffset CreatedAt,
-    DateTimeOffset? UpdatedAt);
+    DateTimeOffset? UpdatedAt,
+    Guid? CreatedByUserId);
 
 public record CreerSignalementRequest(
     SignalementType Type,
+    Guid? LotId,
+    Guid? ImmeubleId,
+    string Titre,
+    string Description);
+
+public record CreerSignalementAgentRequest(
+    Guid ResidentId,
+    string Type,
     Guid? LotId,
     Guid? ImmeubleId,
     string Titre,
@@ -56,4 +65,4 @@ public record ModifierMaintenanceRequest(
     DateTimeOffset DatePrevue,
     string? Recurrence,
     bool VisibleResidents,
-    MaintenanceStatut? NouveauStatut);
+    string? NouveauStatut);

@@ -26,5 +26,17 @@ export const createMaintenance = (data: {
   visibleResidents: boolean
 }) => client.post<MaintenancePlanifiee>('/maintenance-planifiee', data).then(r => r.data)
 
-export const updateMaintenance = (id: string, data: Partial<MaintenancePlanifiee>) =>
+export interface UpdateMaintenanceRequest {
+  type: string
+  libelle: string
+  datePrevue: string
+  recurrence?: string
+  visibleResidents: boolean
+  nouveauStatut?: string
+}
+
+export const updateMaintenance = (id: string, data: UpdateMaintenanceRequest) =>
   client.put<MaintenancePlanifiee>(`/maintenance-planifiee/${id}`, data).then(r => r.data)
+
+export const deleteMaintenance = (id: string) =>
+  client.delete(`/maintenance-planifiee/${id}`)

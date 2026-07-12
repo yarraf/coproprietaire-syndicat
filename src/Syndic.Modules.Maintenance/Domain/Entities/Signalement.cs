@@ -17,6 +17,7 @@ public class Signalement : BaseEntity
     public SignalementStatut Statut { get; private set; }
     public Guid? AssigneA { get; private set; }
     public string? Reponse { get; private set; }
+    public Guid? CreatedByUserId { get; private set; }
 
     public static Signalement Create(
         SignalementType type,
@@ -25,7 +26,8 @@ public class Signalement : BaseEntity
         Guid residentId,
         string titre,
         string description,
-        string? photoPath)
+        string? photoPath,
+        Guid? createdByUserId = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(titre);
         ArgumentException.ThrowIfNullOrWhiteSpace(description);
@@ -39,7 +41,8 @@ public class Signalement : BaseEntity
             Titre = titre.Trim(),
             Description = description.Trim(),
             PhotoPath = photoPath,
-            Statut = SignalementStatut.Recu
+            Statut = SignalementStatut.Recu,
+            CreatedByUserId = createdByUserId
         };
     }
 

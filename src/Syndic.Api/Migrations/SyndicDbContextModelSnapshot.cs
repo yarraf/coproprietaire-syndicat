@@ -699,6 +699,10 @@ namespace Syndic.Api.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("assigne_a");
 
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by_user_id");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");

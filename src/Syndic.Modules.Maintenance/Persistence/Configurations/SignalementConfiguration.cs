@@ -41,6 +41,7 @@ public class SignalementConfiguration : IEntityTypeConfiguration<Signalement>
                    :                   SignalementStatut.Cloture);
         builder.Property(x => x.AssigneA).HasColumnName("assigne_a");
         builder.Property(x => x.Reponse).HasColumnName("reponse").HasColumnType("text");
+        builder.Property(x => x.CreatedByUserId).HasColumnName("created_by_user_id");
 
         builder.HasIndex(x => x.ResidentId).HasDatabaseName("ix_signalements_resident_id");
         builder.HasIndex(x => x.Statut).HasDatabaseName("ix_signalements_statut");

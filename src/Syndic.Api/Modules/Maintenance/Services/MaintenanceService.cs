@@ -15,12 +15,35 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
         CreerSignalementRequest req,
         Guid residentId,
         string? photoPath,
+        Guid? createdByUserId,
         CancellationToken ct = default)
     {
-        var s = Signalement.Create(req.Type, req.LotId, req.ImmeubleId, residentId, req.Titre, req.Description, photoPath);
+        var s = Signalement.Create(req.Type, req.LotId, req.ImmeubleId, residentId, req.Titre, req.Description, photoPath, createdByUserId);
         db.Signalements.Add(s);
         await db.SaveChangesAsync(ct);
         return ToSignalementResponse(s);
+    }
+
+    public async Task<SignalementResponse> CreerSignalementAgentAsync(
+        CreerSignalementAgentRequest req,
+        Guid agentUserId,
+        CancellationToken ct = default)
+    {
+        if (!Enum.TryParse<SignalementType>(req.Type, ignoreCase: true, out var type))
+            throw new ArgumentException($"Type invalide : {req.Type}");
+
+        var s = Signalement.Create(type, req.LotId, req.ImmeubleId, req.ResidentId, req.Titre, req.Description, null, agentUserId);
+        db.Signalements.Add(s);
+        await db.SaveChangesAsync(ct);
+        return ToSignalementResponse(s);
+    }
+
+    public async Task SupprimerSignalementAsync(Guid id, CancellationToken ct = default)
+    {
+        var s = await db.Signalements.FindAsync([id], ct)
+            ?? throw new KeyNotFoundException($"Signalement {id} introuvable.");
+        db.Signalements.Remove(s);
+        await db.SaveChangesAsync(ct);
     }
 
     public async Task<IReadOnlyList<SignalementResponse>> GetSignalementsAsync(SignalementStatut? statut, CancellationToken ct = default)
@@ -97,11 +120,29 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
             ?? throw new KeyNotFoundException($"Maintenance {id} introuvable.");
 
         m.Modifier(req.Type, req.Libelle, req.DatePrevue, req.Recurrence, req.VisibleResidents);
-        if (req.NouveauStatut.HasValue)
-            m.ChangerStatut(req.NouveauStatut.Value);
+
+        if (!string.IsNullOrWhiteSpace(req.NouveauStatut))
+        {
+            var statut = req.NouveauStatut switch
+            {
+                "a_venir"  => MaintenanceStatut.AVenir,
+                "en_cours" => MaintenanceStatut.EnCours,
+                "terminee" => MaintenanceStatut.Terminee,
+                _          => throw new ArgumentException($"Statut invalide : {req.NouveauStatut}")
+            };
+            m.ChangerStatut(statut);
+        }
 
         await db.SaveChangesAsync(ct);
         return ToMaintenanceResponse(m);
+    }
+
+    public async Task SupprimerMaintenanceAsync(Guid id, CancellationToken ct = default)
+    {
+        var m = await db.MaintenancesPlanifiees.FindAsync([id], ct)
+            ?? throw new KeyNotFoundException($"Maintenance {id} introuvable.");
+        db.MaintenancesPlanifiees.Remove(m);
+        await db.SaveChangesAsync(ct);
     }
 
     private static SignalementResponse ToSignalementResponse(Signalement s) => new(
@@ -117,7 +158,8 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
         s.AssigneA,
         s.Reponse,
         s.CreatedAt,
-        s.UpdatedAt);
+        s.UpdatedAt,
+        s.CreatedByUserId);
 
     private static string StatutToString(SignalementStatut statut) => statut switch
     {

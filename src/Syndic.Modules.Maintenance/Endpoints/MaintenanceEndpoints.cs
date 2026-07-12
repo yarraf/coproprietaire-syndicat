@@ -50,13 +50,38 @@ internal static class MaintenanceEndpoints
                 await photo.CopyToAsync(fs, ct);
             }
 
+            Guid? userIdParsed = Guid.TryParse(ctx.User.FindFirstValue(ClaimTypes.NameIdentifier), out var uid) ? uid : null;
             var req = new CreerSignalementRequest(type, lotId, immeubleId, titre, description);
-            var s = await svc.CreerSignalementAsync(req, residentId, photoPath, ct);
+            var s = await svc.CreerSignalementAsync(req, residentId, photoPath, userIdParsed, ct);
             return Results.Created($"/api/signalements/{s.Id}", s);
         })
         .RequireAuthorization(Policies.RequireResident)
         .DisableAntiforgery()
         .WithName("CreerSignalement");
+
+        app.MapPost("/api/signalements/agent", async (
+            CreerSignalementAgentRequest req,
+            HttpContext ctx,
+            IMaintenanceService svc,
+            CancellationToken ct) =>
+        {
+            var agentUserId = ctx.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!Guid.TryParse(agentUserId, out var agentId))
+                return Results.Unauthorized();
+
+            var s = await svc.CreerSignalementAgentAsync(req, agentId, ct);
+            return Results.Created($"/api/signalements/{s.Id}", s);
+        })
+        .RequireAuthorization(Policies.RequireAgent)
+        .WithName("CreerSignalementAgent");
+
+        app.MapDelete("/api/signalements/{id:guid}", async (Guid id, IMaintenanceService svc, CancellationToken ct) =>
+        {
+            await svc.SupprimerSignalementAsync(id, ct);
+            return Results.NoContent();
+        })
+        .RequireAuthorization(Policies.RequireAgent)
+        .WithName("SupprimerSignalement");
 
         app.MapGet("/api/signalements", async (string? statut, IMaintenanceService svc, CancellationToken ct) =>
         {
@@ -122,5 +147,13 @@ internal static class MaintenanceEndpoints
         })
         .RequireAuthorization(Policies.RequireAgent)
         .WithName("ModifierMaintenance");
+
+        app.MapDelete("/api/maintenance-planifiee/{id:guid}", async (Guid id, IMaintenanceService svc, CancellationToken ct) =>
+        {
+            await svc.SupprimerMaintenanceAsync(id, ct);
+            return Results.NoContent();
+        })
+        .RequireAuthorization(Policies.RequireAgent)
+        .WithName("SupprimerMaintenance");
     }
 }

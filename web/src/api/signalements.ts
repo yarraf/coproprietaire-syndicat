@@ -13,6 +13,16 @@ export interface Signalement {
   assigneA?: string
   reponse?: string
   createdAt: string
+  createdByUserId?: string
+}
+
+export interface CreateSignalementAgentRequest {
+  residentId: string
+  type: string
+  lotId?: string
+  immeubleId?: string
+  titre: string
+  description: string
 }
 
 export const getSignalements = (params?: { statut?: string; type?: string }) => {
@@ -24,3 +34,9 @@ export const getSignalement = (id: string) => client.get<Signalement>(`/signalem
 
 export const updateSignalement = (id: string, data: { statut: string; reponse?: string; assigneA?: string }) =>
   client.put<Signalement>(`/signalements/${id}`, data).then(r => r.data)
+
+export const createSignalementAgent = (data: CreateSignalementAgentRequest) =>
+  client.post<Signalement>('/signalements/agent', data).then(r => r.data)
+
+export const deleteSignalement = (id: string) =>
+  client.delete(`/signalements/${id}`)
