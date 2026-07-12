@@ -15,7 +15,6 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog'
 import { getSignalements, createSignalementAgent, deleteSignalement, type Signalement } from '@/api/signalements'
-import { getResidents } from '@/api/copropietaires'
 import { useAuthStore } from '@/store/auth'
 import { formatDateTime } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -23,13 +22,12 @@ import { toast } from 'sonner'
 type View = 'list' | 'card'
 
 interface CreateForm {
-  residentId: string
   type: string
   titre: string
   description: string
 }
 
-const emptyForm: CreateForm = { residentId: '', type: 'incident', titre: '', description: '' }
+const emptyForm: CreateForm = { type: 'incident', titre: '', description: '' }
 
 export function SignalementsPage() {
   const navigate = useNavigate()
@@ -48,12 +46,6 @@ export function SignalementsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['signalements', statutFilter],
     queryFn: () => getSignalements(statutFilter ? { statut: statutFilter } : undefined),
-  })
-
-  const { data: residents = [] } = useQuery({
-    queryKey: ['residents'],
-    queryFn: getResidents,
-    enabled: createOpen,
   })
 
   const createMutation = useMutation({
@@ -83,9 +75,8 @@ export function SignalementsPage() {
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.residentId || !form.titre || !form.description) return
+    if (!form.titre || !form.description) return
     createMutation.mutate({
-      residentId: form.residentId,
       type: form.type,
       titre: form.titre,
       description: form.description,
@@ -161,20 +152,6 @@ export function SignalementsPage() {
             <DialogTitle>Nouveau signalement</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4 mt-2">
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Résident concerné *</label>
-              <select
-                required
-                value={form.residentId}
-                onChange={e => setForm(f => ({ ...f, residentId: e.target.value }))}
-                className="w-full flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-              >
-                <option value="">Sélectionner un résident</option>
-                {residents.map(r => (
-                  <option key={r.id} value={r.id}>{r.firstName} {r.lastName}</option>
-                ))}
-              </select>
-            </div>
             <div className="space-y-1">
               <label className="text-sm font-medium">Type *</label>
               <select

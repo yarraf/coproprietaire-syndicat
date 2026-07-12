@@ -22,7 +22,6 @@ public class SignalementConfiguration : IEntityTypeConfiguration<Signalement>
 
         builder.Property(x => x.LotId).HasColumnName("lot_id");
         builder.Property(x => x.ImmeubleId).HasColumnName("immeuble_id");
-        builder.Property(x => x.ResidentId).HasColumnName("resident_id").IsRequired();
         builder.Property(x => x.Titre).HasColumnName("titre").HasMaxLength(300).IsRequired();
         builder.Property(x => x.Description).HasColumnName("description").HasColumnType("text").IsRequired();
         builder.Property(x => x.PhotoPath).HasColumnName("photo_path").HasMaxLength(500);
@@ -43,7 +42,7 @@ public class SignalementConfiguration : IEntityTypeConfiguration<Signalement>
         builder.Property(x => x.Reponse).HasColumnName("reponse").HasColumnType("text");
         builder.Property(x => x.CreatedByUserId).HasColumnName("created_by_user_id");
 
-        builder.HasIndex(x => x.ResidentId).HasDatabaseName("ix_signalements_resident_id");
         builder.HasIndex(x => x.Statut).HasDatabaseName("ix_signalements_statut");
+        builder.HasIndex(x => x.CreatedByUserId).HasDatabaseName("ix_signalements_created_by");
     }
 }

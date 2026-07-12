@@ -10,7 +10,6 @@ public class Signalement : BaseEntity
     public SignalementType Type { get; private set; }
     public Guid? LotId { get; private set; }
     public Guid? ImmeubleId { get; private set; }
-    public Guid ResidentId { get; private set; }
     public string Titre { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public string? PhotoPath { get; private set; }
@@ -23,7 +22,6 @@ public class Signalement : BaseEntity
         SignalementType type,
         Guid? lotId,
         Guid? immeubleId,
-        Guid residentId,
         string titre,
         string description,
         string? photoPath,
@@ -37,7 +35,6 @@ public class Signalement : BaseEntity
             Type = type,
             LotId = lotId,
             ImmeubleId = immeubleId,
-            ResidentId = residentId,
             Titre = titre.Trim(),
             Description = description.Trim(),
             PhotoPath = photoPath,

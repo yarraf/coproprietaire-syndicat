@@ -4,7 +4,7 @@ namespace Syndic.Shared.Events;
 
 public record SignalementMisAJour(
     Guid SignalementId,
-    Guid ResidentId,
+    Guid? CreatedByUserId,
     string Titre,
     string NouveauStatut
 ) : INotification;

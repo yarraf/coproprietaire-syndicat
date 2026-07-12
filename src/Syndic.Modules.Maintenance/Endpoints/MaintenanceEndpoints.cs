@@ -23,10 +23,6 @@ internal static class MaintenanceEndpoints
             IWebHostEnvironment env,
             CancellationToken ct) =>
         {
-            var residentIdClaim = ctx.User.FindFirstValue("resident_id");
-            if (!Guid.TryParse(residentIdClaim, out var residentId))
-                return Results.Unauthorized();
-
             if (!Enum.TryParse<SignalementType>(form["type"], ignoreCase: true, out var type))
                 return Results.BadRequest("Type de signalement invalide.");
 
@@ -50,9 +46,9 @@ internal static class MaintenanceEndpoints
                 await photo.CopyToAsync(fs, ct);
             }
 
-            Guid? userIdParsed = Guid.TryParse(ctx.User.FindFirstValue(ClaimTypes.NameIdentifier), out var uid) ? uid : null;
+            Guid? userId = Guid.TryParse(ctx.User.FindFirstValue(ClaimTypes.NameIdentifier), out var uid) ? uid : null;
             var req = new CreerSignalementRequest(type, lotId, immeubleId, titre, description);
-            var s = await svc.CreerSignalementAsync(req, residentId, photoPath, userIdParsed, ct);
+            var s = await svc.CreerSignalementAsync(req, photoPath, userId, ct);
             return Results.Created($"/api/signalements/{s.Id}", s);
         })
         .RequireAuthorization(Policies.RequireResident)
@@ -65,8 +61,7 @@ internal static class MaintenanceEndpoints
             IMaintenanceService svc,
             CancellationToken ct) =>
         {
-            var agentUserId = ctx.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!Guid.TryParse(agentUserId, out var agentId))
+            if (!Guid.TryParse(ctx.User.FindFirstValue(ClaimTypes.NameIdentifier), out var agentId))
                 return Results.Unauthorized();
 
             var s = await svc.CreerSignalementAgentAsync(req, agentId, ct);
@@ -74,14 +69,6 @@ internal static class MaintenanceEndpoints
         })
         .RequireAuthorization(Policies.RequireAgent)
         .WithName("CreerSignalementAgent");
-
-        app.MapDelete("/api/signalements/{id:guid}", async (Guid id, IMaintenanceService svc, CancellationToken ct) =>
-        {
-            await svc.SupprimerSignalementAsync(id, ct);
-            return Results.NoContent();
-        })
-        .RequireAuthorization(Policies.RequireAgent)
-        .WithName("SupprimerSignalement");
 
         app.MapGet("/api/signalements", async (string? statut, IMaintenanceService svc, CancellationToken ct) =>
         {
@@ -110,12 +97,19 @@ internal static class MaintenanceEndpoints
         .RequireAuthorization(Policies.RequireAgent)
         .WithName("MettreAJourSignalement");
 
+        app.MapDelete("/api/signalements/{id:guid}", async (Guid id, IMaintenanceService svc, CancellationToken ct) =>
+        {
+            await svc.SupprimerSignalementAsync(id, ct);
+            return Results.NoContent();
+        })
+        .RequireAuthorization(Policies.RequireAgent)
+        .WithName("SupprimerSignalement");
+
         app.MapGet("/api/me/signalements", async (HttpContext ctx, IMaintenanceService svc, CancellationToken ct) =>
         {
-            var residentIdClaim = ctx.User.FindFirstValue("resident_id");
-            if (!Guid.TryParse(residentIdClaim, out var residentId))
+            if (!Guid.TryParse(ctx.User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId))
                 return Results.Unauthorized();
-            var list = await svc.GetSignalementsByResidentAsync(residentId, ct);
+            var list = await svc.GetMesSignalementsAsync(userId, ct);
             return Results.Ok(list);
         })
         .RequireAuthorization(Policies.RequireResident)

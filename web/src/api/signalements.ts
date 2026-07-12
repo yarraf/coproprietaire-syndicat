@@ -5,7 +5,6 @@ export interface Signalement {
   type: string
   lotId?: string
   immeubleId?: string
-  residentId: string
   titre: string
   description: string
   photoPath?: string
@@ -17,7 +16,6 @@ export interface Signalement {
 }
 
 export interface CreateSignalementAgentRequest {
-  residentId: string
   type: string
   lotId?: string
   immeubleId?: string

@@ -13,12 +13,11 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
 {
     public async Task<SignalementResponse> CreerSignalementAsync(
         CreerSignalementRequest req,
-        Guid residentId,
         string? photoPath,
         Guid? createdByUserId,
         CancellationToken ct = default)
     {
-        var s = Signalement.Create(req.Type, req.LotId, req.ImmeubleId, residentId, req.Titre, req.Description, photoPath, createdByUserId);
+        var s = Signalement.Create(req.Type, req.LotId, req.ImmeubleId, req.Titre, req.Description, photoPath, createdByUserId);
         db.Signalements.Add(s);
         await db.SaveChangesAsync(ct);
         return ToSignalementResponse(s);
@@ -32,7 +31,7 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
         if (!Enum.TryParse<SignalementType>(req.Type, ignoreCase: true, out var type))
             throw new ArgumentException($"Type invalide : {req.Type}");
 
-        var s = Signalement.Create(type, req.LotId, req.ImmeubleId, req.ResidentId, req.Titre, req.Description, null, agentUserId);
+        var s = Signalement.Create(type, req.LotId, req.ImmeubleId, req.Titre, req.Description, null, agentUserId);
         db.Signalements.Add(s);
         await db.SaveChangesAsync(ct);
         return ToSignalementResponse(s);
@@ -82,16 +81,16 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
         s.MettreAJour(statut, req.Reponse, req.AssigneA);
         await db.SaveChangesAsync(ct);
 
-        await publisher.Publish(new SignalementMisAJour(s.Id, s.ResidentId, s.Titre, StatutToString(s.Statut)), ct);
+        await publisher.Publish(new SignalementMisAJour(s.Id, s.CreatedByUserId, s.Titre, StatutToString(s.Statut)), ct);
 
         return ToSignalementResponse(s);
     }
 
-    public async Task<IReadOnlyList<SignalementResponse>> GetSignalementsByResidentAsync(Guid residentId, CancellationToken ct = default)
+    public async Task<IReadOnlyList<SignalementResponse>> GetMesSignalementsAsync(Guid userId, CancellationToken ct = default)
     {
         var list = await db.Signalements
             .AsNoTracking()
-            .Where(s => s.ResidentId == residentId)
+            .Where(s => s.CreatedByUserId == userId)
             .OrderByDescending(s => s.CreatedAt)
             .ToListAsync(ct);
         return list.Select(ToSignalementResponse).ToList();
@@ -150,7 +149,6 @@ public sealed class MaintenanceService(SyndicDbContext db, IPublisher publisher)
         s.Type == SignalementType.Reclamation ? "reclamation" : "incident",
         s.LotId,
         s.ImmeubleId,
-        s.ResidentId,
         s.Titre,
         s.Description,
         s.PhotoPath,

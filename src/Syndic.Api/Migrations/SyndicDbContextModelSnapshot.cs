@@ -729,10 +729,6 @@ namespace Syndic.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("reponse");
 
-                    b.Property<Guid>("ResidentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("resident_id");
-
                     b.Property<string>("Statut")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -757,8 +753,8 @@ namespace Syndic.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResidentId")
-                        .HasDatabaseName("ix_signalements_resident_id");
+                    b.HasIndex("CreatedByUserId")
+                        .HasDatabaseName("ix_signalements_created_by");
 
                     b.HasIndex("Statut")
                         .HasDatabaseName("ix_signalements_statut");

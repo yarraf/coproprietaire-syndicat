@@ -7,7 +7,6 @@ public record SignalementResponse(
     string Type,
     Guid? LotId,
     Guid? ImmeubleId,
-    Guid ResidentId,
     string Titre,
     string Description,
     string? PhotoPath,
@@ -26,7 +25,6 @@ public record CreerSignalementRequest(
     string Description);
 
 public record CreerSignalementAgentRequest(
-    Guid ResidentId,
     string Type,
     Guid? LotId,
     Guid? ImmeubleId,
